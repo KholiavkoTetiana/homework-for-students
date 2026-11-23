@@ -13,3 +13,6 @@ interface User {
     age: number;
     email: string;
 }
+
+type FullUser = Required<User>;
+type PartialUser = Partial<User>;

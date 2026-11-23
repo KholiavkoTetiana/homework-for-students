@@ -23,13 +23,31 @@ import './App.css'
 function App() {
 
   const [task, setTask] = React.useState(null);
+  const [error, setError] = React.useState('');
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-
+    fetch('https://jsonplaceholder.typicode.com/todos/1')
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.json();
+      })
+      .then(setTask)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
   
   return (<div className='container'>
     <h1>React Homework</h1>
+    {loading && <p>Завантаження...</p>}
+    {error && <p>Помилка: {error}</p>}
+    {task && (
+      <div>
+        <p>ID: {task.id}</p>
+        <p>Title: {task.title}</p>
+        <p>Completed: {task.completed ? 'Так' : 'Ні'}</p>
+      </div>
+    )}
   </div>)
 }
 
